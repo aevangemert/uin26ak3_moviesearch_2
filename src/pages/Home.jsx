@@ -1,21 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Movies from '../components/Movies'
-
- //her skal james bond filmene vises
 
 export default function Home() {
 
-    const [search, setSearch] = useState("")
+    const [search, setSearch] = useState("James Bond")
     const [searchResult, setSearchResult] = useState([])
 
-    const baseUrl = `http://www.omdbapi.com/?s=${search}&apikey=`
-    //GJØR SÅNN!!!!!
+    // const baseUrl = `http://www.omdbapi.com/?s=${search}&apikey=`
+
+    //api-nøkkelen, nøkkel ligger i egen .env fil og lagt til i gitignore for at den ikke skal pushes til github
     const apiKey = import.meta.env.VITE_APP_API_KEY
 
     //asynkron funksjon, venter med å kjøre den funksjonen som ikke er helt lasta slik at siden ikke kræsjer
     const getMovies = async () => {
         try {
-            const response = await fetch(`${baseUrl}${apiKey}`)
+
+            //`${baseUrl}${apiKey}`
+            const response = await fetch(`http://www.omdbapi.com/?s=${search}&apikey=${apiKey}`)
             const data = await response.json()
 
             console.log("sjekk data", data)
@@ -27,6 +28,13 @@ export default function Home() {
             console.error(err);
         }
     }
+  
+    //useEffect som henter filmer etter brukeren har skrevet inn minst 3 bokstaver
+    useEffect(() => {
+        if (search.length >= 3) {
+            getMovies()
+        }
+    }, [search])
 
     const handleChange = (e) => {
         setSearch(e.target.value)
@@ -34,8 +42,7 @@ export default function Home() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        e.target.reset()
-        // console.log(searchResult)
+        // e.target.reset()
     }
 
 
@@ -45,10 +52,9 @@ export default function Home() {
             <form onSubmit={handleSubmit}>
                 <label>
                     Søk etter film
-                    <input type="search" placeholder="Back to the Future" onChange={handleChange}></input>
+                    <input type="search" placeholder="Back to the Future" value={search} onChange={handleChange}></input>
                 </label>
-                {/* ?? focused <History history={history} setSearch={setSearch}/> : null*/}
-                <button onClick={getMovies}>Søk</button>
+                {/* <button onClick={getMovies}>Søk</button> */}
             </form>
             {/*
         TODO:
@@ -58,9 +64,9 @@ export default function Home() {
         -> et komponent som representerer én film i listevisning
         */}
 
-            {/*her kommer movies componenten med moviecard componenten "inni seg"*/}
+            {/*her kommer movies componenten som har moviecard componenten*/}
             <section>
-                <Movies searchResult={searchResult}/>
+                <Movies searchResult={searchResult} />
             </section>
         </main>
 
