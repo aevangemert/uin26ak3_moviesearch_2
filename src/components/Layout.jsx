@@ -6,7 +6,7 @@ export default function Layout({children}){
         <>
         <nav>
             <Link to="/">Forside</Link>
-            <Link to="/movies">Filmer</Link>
+            {/* <Link to="/movies">Filmer</Link> */}
         </nav>
         {children}
     </>

@@ -9,7 +9,8 @@ import Movies from '../components/Movies'
    -> et komponent som representerer én film i listevisning
    */
 
-export default function Home() {
+//setSelectedMovie fra app
+export default function Home({setSelectedMovie}) {
 
     const [search, setSearch] = useState("James Bond")
     const [searchResult, setSearchResult] = useState([])
@@ -60,13 +61,13 @@ export default function Home() {
             <form onSubmit={handleSubmit}>
                 <label>
                     Søk etter film
-                    <input type="search" placeholder="Back to the Future" value={search} onChange={handleChange}></input>
+                    <input type="search" placeholder="James Bond.." value={search} onChange={handleChange}></input>
                 </label>
                 {/* <button onClick={getMovies}>Søk</button> */}
             </form>
             {/*her kommer movies componenten som har moviecard componenten*/}
             <section>
-                <Movies searchResult={searchResult} />
+                <Movies searchResult={searchResult} setSelectedMovie={setSelectedMovie}/>
             </section>
         </main>
 
